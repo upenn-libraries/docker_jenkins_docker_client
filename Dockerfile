@@ -4,7 +4,7 @@ USER root
 WORKDIR /tmp
 
 # Install Docker client
-ENV DOCKER_VERSION=18.03.1-ce
+ENV DOCKER_VERSION=18.09.2
 RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz && \
     mv docker-${DOCKER_VERSION}.tgz docker.tgz && \
     tar xzvf docker.tgz && \
