@@ -1,14 +1,14 @@
 version: 2.1
 
 orbs:
-  docker-publish: upenn-libraries/docker-publish@0.1.0
+  docker-publish: circleci/docker-publish@0.1.7
 
 docker-publish: &docker-publish
   docker-publish/publish:
     context: quay.io
     registry: quay.io
     image: upennlibraries/jenkins_docker_client
-    label_prefix: edu.upenn.library
+    tag: lts
 
 workflows:
   build:
