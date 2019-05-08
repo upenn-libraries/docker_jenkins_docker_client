@@ -11,6 +11,11 @@ RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${
     mv docker/docker /usr/local/bin && \
     rm -r docker docker.tgz
 
+# Add Jenkins to Docker group with same GID on host
+ARG DOCKER_GID=993
+RUN groupadd -g $DOCKER_GID docker && \
+    usermod -a -G docker jenkins
+
 USER jenkins
 WORKDIR /var/jenkins_home
 
