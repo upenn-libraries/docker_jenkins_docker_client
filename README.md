@@ -6,5 +6,8 @@ This is an Alpine build of [Jenkins](https://jenkins.io/). It includes a Docker 
 
 | Name | Default | Function |
 | --- | --- | --- |
+| DOCKER_CHANNEL | stable | Channel to use for downloading Docker |
+| DOCKER_GROUP | docker | Name for the Docker group |
+| DOCKER_VERSION | 19.03.11 | Version of Docker to install |
 | JENKINS_PLUGINS | calendar-view | A string of space delimitted plugins |
-| JENKINS_VERSION | lts | Jenkins Version (global arg) |
+| JENKINS_TAG | lts-alpine | Jenkins Image Tag (global arg) |

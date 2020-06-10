@@ -1,18 +1,19 @@
-# Jenkins Docker tag
-ARG JENKINS_VERSION=lts-alpine
+# Jenkins Image Tag
+ARG JENKINS_TAG=lts-alpine
 
-FROM jenkins/jenkins:${JENKINS_VERSION}
+FROM jenkins/jenkins:${JENKINS_TAG}
 
-# Docker Channel
-ENV DOCKER_CHANNEL=stable
+# Channel to use for downloading Docker
+ARG DOCKER_CHANNEL=stable
 
-# Docker Group
-ENV DOCKER_GROUP=docker
+# Name for the Docker group
+ARG DOCKER_GROUP=docker
+ENV DOCKER_GROUP=${DOCKER_GROUP}
 
-# Docker Version
-ENV DOCKER_VERSION=19.03.11
+# Version of Docker to install
+ARG DOCKER_VERSION=19.03.11
 
-# Jenkins Plugins - a string of space delimitted plugins
+# A string of space delimitted plugins
 ARG JENKINS_PLUGINS="calendar-view"
 
 COPY ./docker-entrypoint.sh /usr/local/bin/
