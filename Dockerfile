@@ -6,6 +6,9 @@ FROM jenkins/jenkins:${JENKINS_VERSION}
 # Docker Channel
 ENV DOCKER_CHANNEL=stable
 
+# Docker Group
+ENV DOCKER_GROUP=docker
+
 # Docker Version
 ENV DOCKER_VERSION=19.03.11
 
@@ -16,6 +19,7 @@ COPY ./docker-entrypoint.sh /usr/local/bin/
 
 USER root
 
+# Install Docker
 RUN wget -O docker.tgz "https://download.docker.com/linux/static/${DOCKER_CHANNEL}/x86_64/docker-${DOCKER_VERSION}.tgz" && \
     tar --extract --file docker.tgz --strip-components 1 --directory /usr/local/bin/ && \
     rm docker.tgz && \
@@ -25,8 +29,8 @@ RUN wget -O docker.tgz "https://download.docker.com/linux/static/${DOCKER_CHANNE
 RUN apk add --no-cache \
         shadow \
         'su-exec>=0.2' && \
-    addgroup docker && \
-    addgroup jenkins docker && \
+    addgroup ${DOCKER_GROUP} && \
+    addgroup jenkins ${DOCKER_GROUP} && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Install plugins
