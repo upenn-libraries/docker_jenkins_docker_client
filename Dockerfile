@@ -1,22 +1,41 @@
-FROM jenkins/jenkins:lts
+# Jenkins Docker tag
+ARG JENKINS_VERSION=lts-alpine
+
+FROM jenkins/jenkins:${JENKINS_VERSION}
+
+# Docker Channel
+ENV DOCKER_CHANNEL=stable
+
+# Docker Version
+ENV DOCKER_VERSION=19.03.11
+
+# Jenkins Plugins - a string of space delimitted plugins
+ARG JENKINS_PLUGINS="calendar-view"
+
+COPY ./docker-entrypoint.sh /usr/local/bin/
 
 USER root
-WORKDIR /tmp
 
-# Install Docker client
-ENV DOCKER_VERSION=18.09.6
-RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz && \
-    mv docker-${DOCKER_VERSION}.tgz docker.tgz && \
-    tar xzvf docker.tgz && \
-    mv docker/docker /usr/local/bin && \
-    rm -r docker docker.tgz
+RUN wget -O docker.tgz "https://download.docker.com/linux/static/${DOCKER_CHANNEL}/x86_64/docker-${DOCKER_VERSION}.tgz" && \
+    tar --extract --file docker.tgz --strip-components 1 --directory /usr/local/bin/ && \
+    rm docker.tgz && \
+    docker --version
 
-# Add Jenkins to Docker group with same GID on host
-ARG DOCKER_GID=993
-RUN groupadd -g $DOCKER_GID docker && \
-    usermod -a -G docker jenkins
+# Add packages, create docker group, add jenkins to the docker group, and make the entrypoint executable
+RUN apk add --no-cache \
+        shadow \
+        'su-exec>=0.2' && \
+    addgroup docker && \
+    addgroup jenkins docker && \
+    chmod +x /usr/local/bin/docker-entrypoint.sh
 
-USER jenkins
+# Install plugins
+RUN /usr/local/bin/install-plugins.sh ${JENKINS_PLUGINS}
+
 WORKDIR /var/jenkins_home
 
-EXPOSE 8080
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]
+
+HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail "http://localhost:8080/login?from=login" || exit 1
