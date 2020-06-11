@@ -13,7 +13,7 @@ ENV DOCKER_GROUP=${DOCKER_GROUP}
 # Version of Docker to install
 ARG DOCKER_VERSION=19.03.11
 
-# A string of space delimitted plugins
+# A string of space delimited plugins
 ARG JENKINS_PLUGINS="calendar-view"
 
 COPY ./docker-entrypoint.sh /usr/local/bin/
