@@ -30,7 +30,7 @@ docker-publish: &docker-publish
           success_message: ":tada: Success! ${CIRCLE_USERNAME}'s workflow (<${CIRCLE_BUILD_URL}|${CIRCLE_JOB}>) in <${GIT_URL}|${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}>, Message: ${GIT_COMMIT_DESC}"
           webhook: ${SLACK_WEBHOOK}
     registry: quay.io
-    tag: alpine
+    tag: lts-alpine
 
 workflows:
   build:
