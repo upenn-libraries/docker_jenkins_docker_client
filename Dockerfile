@@ -35,7 +35,7 @@ RUN apk add --no-cache \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Install plugins
-RUN /usr/local/bin/install-plugins.sh ${JENKINS_PLUGINS}
+RUN jenkins-plugin-cli --plugins ${JENKINS_PLUGINS}
 
 WORKDIR /var/jenkins_home
 
